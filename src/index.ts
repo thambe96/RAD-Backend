@@ -1,19 +1,50 @@
 import express from "express"
 import { Request, Response } from "express"
+import testRoute from "./routes/test.route"
 import dotenv from "dotenv"
+import mongoose from "mongoose"
+import { error } from "console"
+import authRoter from "./routes/auth.route"
+
 
 dotenv.config()
 
 const SERVER_PORT = process.env.SERVER_PORT
+const MONGO_URL = process.env.MONGO_URL as string
 const app = express()
 app.use(express.json())
 
-app.get("/testApi", (req: Request, res: Response) => {
-    return res.status(200).json({message: "Test API Working fine!"})
+// app.get("/testApi", (req: Request, res: Response) => {
+//     return res.status(200).json({message: "Test API Working fine!"})
+// })
+
+app.use("/api/v1/test", testRoute)
+app.get("/testIndexGet", (req: Request, res: Response) => {
+    return res.status(200).json({message: "This is alright"})
 })
 
 
+// console.log(MONGO_URL)
 
+
+app.use("/api/v1/auth", authRoter)
+
+
+
+
+
+
+
+
+mongoose
+    .connect(MONGO_URL)
+    .then(() => {
+        console.log("DB connected")
+    })
+    .catch((error) => {
+        console.error(`DB connection fail: ${error}`)
+        process.exit(1)
+    })
 
 
 app.listen(SERVER_PORT, () => {
