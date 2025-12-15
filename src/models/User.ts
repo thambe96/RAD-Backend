@@ -27,6 +27,8 @@ export interface IUser extends Document {
     imageURL?: string
     status?: ApprovalStatus
 
+    // more attributes to be added - followers, 
+
 }
 
 const userSchema = new Schema<IUser> ({
