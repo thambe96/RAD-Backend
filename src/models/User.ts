@@ -27,8 +27,6 @@ export interface IUser extends Document {
     imageURL?: string
     status?: ApprovalStatus
 
-    // more attributes to be added - followers, 
-
 }
 
 const userSchema = new Schema<IUser> ({
@@ -39,6 +37,7 @@ const userSchema = new Schema<IUser> ({
     roles: {type: [String], enum: Object.values(Role), default: [Role.USER]},
     imageURL: {type: String},
     status: {type: String, enum: Object.values("ApprovalStatus"), default: [Role]}
+   
 }
 
 )

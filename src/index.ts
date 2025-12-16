@@ -5,6 +5,8 @@ import dotenv from "dotenv"
 import mongoose from "mongoose"
 import { error } from "console"
 import authRoter from "./routes/auth.route"
+import movieReviewPostRouter from "./routes/movieReviewPost.route"
+
 
 
 dotenv.config()
@@ -19,15 +21,20 @@ app.use(express.json())
 // })
 
 app.use("/api/v1/test", testRoute)
-app.get("/testIndexGet", (req: Request, res: Response) => {
-    return res.status(200).json({message: "This is alright"})
-})
+
+// app.get("/testIndexGet", (req: Request, res: Response) => {
+//     return res.status(200).json({message: "This is alright"})
+// })
 
 
 // console.log(MONGO_URL)
 
 
 app.use("/api/v1/auth", authRoter)
+
+app.use("/api/v1/movieReviewPost", movieReviewPostRouter)
+
+
 
 
 

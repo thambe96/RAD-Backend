@@ -6,8 +6,8 @@ interface IMovieReview extends Document{
     _id: mongoose.Types.ObjectId
     title: string,
     content: string,
-    comments?: [mongoose.Types.ObjectId]
-    
+    category: string,
+    movieImageURL: string,
     // more attributes to be added - comments, likes
 }
 
@@ -15,7 +15,8 @@ interface IMovieReview extends Document{
 const imovieReviewSchema = new Schema<IMovieReview>({
     title: {type: String, required: true},
     content: {type: String, required: true},
-    comments: {type: [Schema.Types.ObjectId], ref: "Comment"}
+    category: {type: String, required: true},
+    movieImageURL: {type: String, required: true},
     
 })
 
