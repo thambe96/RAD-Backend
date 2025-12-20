@@ -2,12 +2,26 @@ import { Request, Response } from "express"
 
 
 export const register = (req: Request, res: Response) => {
-    console.log("Hi this register endpoint")
+    // console.log("Hi this register endpoint")
+    // lastname: string
+    // email: string
+    // password: string
+    // roles: Role[]
+    // imageURL?: string
+    // status?: ApprovalStatus
     
+
+    const {firstname, lastname, imageURL, email, password} = req.body
+    // const firstname = req.body.name
+    // const lastname = req.body.lname
+
+    console.log(`${firstname} ${lastname} ${imageURL} ${email}`)
+
+
 
     // setup the approval status based on the role
 
-    console.log(req.body)
+    // console.log(req.body)
 
     res.status(201).json({
         message: "successfully registered the user", 
