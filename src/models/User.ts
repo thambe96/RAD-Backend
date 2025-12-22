@@ -7,13 +7,15 @@ export enum Role{
     ADMIN = "ADMIN",
     CONTRIBUTOR = "CONTRIBUTOR",
     USER = "USER"
+    
 
 }
 
 export enum ApprovalStatus {
     PENDING = "PENDING",
     REJECT = "REJECT",
-    APPROVED = "APPROVED"
+    APPROVED = "APPROVED",
+    DEFAULT = "DEFAULT" // default status for a normal user
 }
 
 
@@ -34,9 +36,9 @@ const userSchema = new Schema<IUser> ({
     lastname: {type: String, required: true},
     email: {type: String, required: true},
     password: {type: String, required: true},
-    roles: {type: [String], enum: Object.values(Role), default: [Role.USER]},
+    roles: {type: [String], enum: Object.values(Role), default: [Role.ADMIN, Role.USER]},
     imageURL: {type: String},
-    status: {type: String, enum: Object.values("ApprovalStatus"), default: [Role]}
+    status: {type: String, enum: Object.values("ApprovalStatus"), default: ApprovalStatus.DEFAULT}
    
 }
 
