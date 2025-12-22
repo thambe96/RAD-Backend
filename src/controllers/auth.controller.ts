@@ -5,67 +5,69 @@ import cloudinary from "../config/cloudinary"
 
 
 export const register = async (req: Request, res: Response) => {
-    // console.log("Hi this register endpoint")
-    // lastname: string
-    // email: string
-    // password: string
-    // roles: Role[]
-    // imageURL?: string
-    // status?: ApprovalStatus
-    
 
-    const {firstname, lastname, email, password} = req.body
-  
-    //validate data here
-    
+    try {
+        const {firstname, lastname, email, password} = req.body
+        const roles = Role.USER
+        const status = ApprovalStatus.DEFAULT
+        let imageURL = await imageUploader(req.file?.buffer)
+        
 
-    // const userRole = Role.USER ? req.body.role !== Role.CONTRIBUTOR && req.body.role !== Role.ADMIN : Role.CONTRIBUTOR
-    const roles = Role.ADMIN
+        //Add validations to all the fields
+        const nameRegex = /^[A-Za-z]+$/;
+        const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        if (!firstname || !lastname || !email || !password) {
+            return res.status(400).json({message: 'All fields are needed'})
+        }
 
+        if (!nameRegex.test(firstname)) return res.status(400).json({message: 'Invalid firstname'})
+        if (!nameRegex.test(lastname)) return res.status(400).json({message: 'Invalid lastname'})
+        if (!emailRegex.test(email) ) return res.status(400).json({message: 'Invalid email'})
+        if (!passwordRegex.test(password)) return res.status(400).json({message: 'Invalid password'})
 
-    // const userStatus = ApprovalStatus.APPROVED ? req.body.status !== ApprovalStatus.REJECT && req.body.status !== ApprovalStatus.PENDING : ApprovalStatus
-    const status = ApprovalStatus.REJECT
-    
-    
-    // const userStatus = ApprovalStatus.DEFAULT ? userRole.valueOf() === Role.USER : ApprovalStatus.PENDING
-    // checks the userRole and if the userRole === USER , set the status to DEFAULT. otherwise status = PENDING
-    // Admins are not going to be registered through frontend, only USER - (user registration) and CONTRIBUTOR -( ADMIN adds)  are registered
+        const userRoles: Role[] = [Role.ADMIN, Role.USER, Role.CONTRIBUTOR]
+        const isValidRole = userRoles.some((role) => roles === role) // true
+        if (!isValidRole) return res.status(400).json({message: 'Invalid user role'})
+        const approvals: ApprovalStatus[] = [ApprovalStatus.APPROVED, ApprovalStatus.DEFAULT, ApprovalStatus.PENDING, ApprovalStatus.REJECT]
+        const isValidStatus = approvals.some((approval) => status === approval)
+        if (!isValidStatus) return res.status(400).json({message: 'Invalid approval status'})
+        
+        // hash the password using bcrypt 
 
-    let imageURL = ""//await imageUploader(req.file?.buffer)
+        //make sure you schema fields exactly matche with the fields you provide here, otherwise defaults will be applied for those fields
+        const newUser = new User({
+            firstname,
+            lastname,
+            email,
+            password,
+            roles,
+            imageURL,
+            status
 
+        })
 
-    // console.log('Cloudinary Details!')
-    // console.log(cloudinary)
-    // console.log(cloudinary.uploader)
+        await newUser.save()
+        res.status(201).json({
+            message: "successfully registered the user", 
+            data: newUser
+        })
 
-    console.log(`These are user role and status:  ${status}, ${roles}`)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            message: 'Faild to create the user',
+            data: error
 
-    //make sure you schema fields exactly matche with the fields you provide here, otherwise defaults will be applied for those fields
-    const newUser = new User({
-        firstname,
-        lastname,
-        email,
-        password,
-        roles,
-        imageURL,
-        status
-
-    })
-
-    // setup the approval status based on the role
-
-    // console.log(req.file)
-    // console.log(`${newUser}}`)
-
-
-    
-   
-    
-    res.status(201).json({
-        message: "successfully registered the user", 
-        data: newUser
-       })
+        })
+    }
+ 
 }
+
+
+
+
+
 
 
 

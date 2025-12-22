@@ -36,9 +36,9 @@ const userSchema = new Schema<IUser> ({
     lastname: {type: String, required: true},
     email: {type: String, required: true},
     password: {type: String, required: true},
-    roles: {type: [String], enum: Object.values(Role), default: [Role.ADMIN, Role.USER]},
+    roles: {type: [String], enum: Object.values(Role), default: [Role.USER]},
     imageURL: {type: String},
-    status: {type: String, enum: Object.values("ApprovalStatus"), default: ApprovalStatus.DEFAULT}
+    status: {type: String, enum: Object.values(ApprovalStatus), default: ApprovalStatus.DEFAULT}
    
 }
 
