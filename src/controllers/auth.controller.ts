@@ -2,6 +2,8 @@ import { Request, response, Response } from "express"
 import { ApprovalStatus, Role, User } from "../models/User"
 import { imageUploader } from "../utils/upload.image"
 import cloudinary from "../config/cloudinary"
+import { signAccessToken, signRefreshToken } from "../utils/tokens"
+import { type } from "os"
 
 
 export const register = async (req: Request, res: Response) => {
@@ -34,6 +36,7 @@ export const register = async (req: Request, res: Response) => {
         if (!isValidStatus) return res.status(400).json({message: 'Invalid approval status'})
         
         // hash the password using bcrypt 
+        // check email if it already exits
 
         //make sure you schema fields exactly matche with the fields you provide here, otherwise defaults will be applied for those fields
         const newUser = new User({
@@ -72,9 +75,46 @@ export const register = async (req: Request, res: Response) => {
 
 
 
-export const login = (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
 
-    res.status(201).json({message: "successfully logged in!"})
+    console.log('request hits on the endpoint!!')
+
+    try {
+       
+        
+        console.log('safely in try first line')
+        const {email, password} = req.body
+        console.log('safely in try second line')
+        const user = await User.findOne({email})
+        if (!user) return res.status(401).json({
+            message: "invalid email"
+        })
+        if (password !== user.password) return res.status(401).json({
+            message: "invalid password!"
+        })
+
+        const accessToken = signAccessToken(user)
+        const refreshToken = signRefreshToken(user)
+
+        res.status(200).json({
+            message: "login successful!",
+            data: {
+                accessToken: accessToken,
+                refreshToken: refreshToken
+            }
+        })
+
+    } catch (error: any) {
+
+        res.status(500).json(
+            {
+                message: "Internal server error",
+                data: error.message
+            }
+        )
+        
+    }
+   
 
 }
 
@@ -100,8 +140,16 @@ export const updateApprovalStatus = () => {
 }
 
 
-export const getUserDetails = (req: Request, res: Response) => {
-    console.log("hi this get user")
+export const getUserDetails = async (req: Request, res: Response) => {
+    const {_id, email} = req.query
+    // const user = await User.findById(id)
+    // const user = await User.findOne({_id})
+    const user = await User.findOne({email})
+    console.log(user)
     
-    res.status(201).json({message: "successfully logged in and get user details!"})
+    
+    res.status(200).json({
+        message: "Ok",
+        data: user
+    })
 }
