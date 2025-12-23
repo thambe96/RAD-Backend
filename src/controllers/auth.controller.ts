@@ -134,9 +134,13 @@ export const updateProfilePicture = () => {
 
 }
 
-export const updateApprovalStatus = () => {
+export const updateApprovalStatus = (req: Request, res: Response) => {
     // only admin can access this endpoint
     // give the approval based on the the role
+    console.log("This is updateApproval status endpoint!")
+    
+    res.status(200).json({message: "successfully updated the status!!"})
+    
 }
 
 
