@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { register, login, getUserDetails, updateApprovalStatus } from "../controllers/auth.controller"
+import { register, login, getUserDetails, updateApprovalStatus, handleRefreshToken } from "../controllers/auth.controller"
 import { upload } from "../middleware/upload"
 import { authenticate } from "../middleware/auth"
 import { checkRole } from "../middleware/inspect"
@@ -12,6 +12,7 @@ authRoter.post("/register", upload.single("userimage"),register)
 authRoter.post("/login", login)
 authRoter.get("/getUser", authenticate, getUserDetails)
 authRoter.post("/updateApproval", authenticate, checkRole(Role.ADMIN), updateApprovalStatus)
+authRoter.post("/refrsh", handleRefreshToken)
 
 
 export default authRoter

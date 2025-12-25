@@ -14,7 +14,7 @@ export const signAccessToken = (user: IUser): string => {
             }, 
                 JWT_SECRET, 
             { 
-                expiresIn: '1h' 
+                expiresIn: '10m' 
             }
         )
     }
@@ -22,12 +22,12 @@ export const signAccessToken = (user: IUser): string => {
 export const signRefreshToken = (user: IUser): string =>{ 
     return jwt.sign(
             {
-                sub: user._id.toString,
+                sub: user._id.toString(),
                 roles: user.roles
             }, 
                 JWT_REFRESH_SECRET, 
             { 
-                expiresIn: '1h' 
+                expiresIn: '7d' 
             }
         )
     }

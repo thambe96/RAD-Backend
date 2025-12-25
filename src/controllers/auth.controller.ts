@@ -3,8 +3,13 @@ import { ApprovalStatus, Role, User } from "../models/User"
 import { imageUploader } from "../utils/upload.image"
 import cloudinary from "../config/cloudinary"
 import { signAccessToken, signRefreshToken } from "../utils/tokens"
+import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
 import { type } from "os"
 
+dotenv.config()
+
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET as string
 
 export const register = async (req: Request, res: Response) => {
 
@@ -122,8 +127,36 @@ export const login = async (req: Request, res: Response) => {
 
 
 
-export const handleRefreshToken = () => {
+export const handleRefreshToken = async (req: Request, res: Response) => {
+   
 
+    try {
+        const { token } = req.body
+        if (!token) {
+            return res.status(400).json({message: "unuthorized! no token provided"})
+        }        
+        const payload = jwt.verify(token, JWT_REFRESH_SECRET)
+        console.log(payload)
+        const user = await User.findById(payload.sub)
+        if (!user) {
+            return res.status(403).json({message: "unuthorized! no user exists by this token"})
+        }
+        const newAccessToken: string = signAccessToken(user)
+
+        // Test the code
+
+        res.status(200).json({
+            message: "successful!",
+            accessToken: newAccessToken
+        })
+
+    } catch (error: any) {
+        res.status(500).json({
+            message: "internal server error!", 
+            data: error.message
+        })
+    }
+   
 }
 
 
@@ -138,7 +171,7 @@ export const updateApprovalStatus = (req: Request, res: Response) => {
     // only admin can access this endpoint
     // give the approval based on the the role
     console.log("This is updateApproval status endpoint!")
-    
+
     res.status(200).json({message: "successfully updated the status!!"})
     
 }
@@ -153,7 +186,7 @@ export const getUserDetails = async (req: Request, res: Response) => {
     
     
     res.status(200).json({
-        message: "Ok",
+        message: "ok",
         data: user
     })
 }
