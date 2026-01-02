@@ -8,7 +8,7 @@ import { Role } from "../models/User"
 const authRoter = Router()
 
 
-authRoter.post("/register", upload.single("userimage"),register)
+authRoter.post("/register", upload.single("userimage"), register)
 authRoter.post("/login", login)
 authRoter.get("/getUser", authenticate, getUserDetails)
 authRoter.post("/updateApproval", authenticate, checkRole(Role.ADMIN), updateApprovalStatus)

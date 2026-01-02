@@ -1,6 +1,7 @@
 import express from "express"
 import { Request, Response } from "express"
 import testRoute from "./routes/test.route"
+import cors from "cors"
 import dotenv from "dotenv"
 import mongoose from "mongoose"
 import { error } from "console"
@@ -15,6 +16,11 @@ const SERVER_PORT = process.env.SERVER_PORT
 const MONGO_URL = process.env.MONGO_URL as string
 const app = express()
 app.use(express.json())
+
+app.use(cors({
+  origin: "http://localhost:5173", // your frontend
+  credentials: true
+}))
 
 // app.get("/testApi", (req: Request, res: Response) => {
 //     return res.status(200).json({message: "Test API Working fine!"})

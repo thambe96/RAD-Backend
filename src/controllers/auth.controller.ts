@@ -6,6 +6,7 @@ import { signAccessToken, signRefreshToken } from "../utils/tokens"
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 import { type } from "os"
+import { AuthRequest } from "../middleware/auth"
 
 dotenv.config()
 
@@ -15,8 +16,8 @@ export const register = async (req: Request, res: Response) => {
 
     try {
         const {firstname, lastname, email, password} = req.body
-        const roles = Role.USER
-        const status = ApprovalStatus.DEFAULT
+        const roles = Role.USER //Role.ADMIN
+        const status = ApprovalStatus.DEFAULT // ApprovalStatus.APPROVED
         let imageURL = await imageUploader(req.file?.buffer)
         
 
@@ -177,11 +178,21 @@ export const updateApprovalStatus = (req: Request, res: Response) => {
 }
 
 
-export const getUserDetails = async (req: Request, res: Response) => {
-    const {_id, email} = req.query
+export const getUserDetails = async (req: AuthRequest, res: Response) => {
+    // const {_id, email} = req.query
     // const user = await User.findById(id)
     // const user = await User.findOne({_id})
-    const user = await User.findOne({email})
+
+
+
+    // const user = await User.findOne({email})
+
+    // we attached userDetails to req in authenticate middleware -- you have to change the req reference type to AuthRequest
+    // otherwise req.userDetails will show an error 
+
+    const _id = req.userDetails.sub
+    const user = await User.findOne({_id})
+
     console.log(user)
     
     
