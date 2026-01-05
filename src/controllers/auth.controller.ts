@@ -232,9 +232,39 @@ export const getPendingStatusProfiles = async (req: AuthRequest, res: Response) 
 
     try {
         const pendingStatusUsers = await User.find({status: 'PENDING'})
+        console.log(pendingStatusUsers)
+
         res.json(pendingStatusUsers)
     } catch (err) {
         res.status(501).json({message: "server error"})
     }
+
+}
+
+
+export const approveContributorRequest = async (req: AuthRequest, res: Response) => {
+
+    const {id, status} = req.query
+
+    console.log(id)
+    console.log(status)
+
+    try {
+        const statusUpdatedUser = await User.findByIdAndUpdate(
+            id,
+            {status: status},
+            {new: true}
+        )
+ 
+        if (!statusUpdatedUser) {
+            return res.status(404).json({message: 'no user found!'})
+        }
+        res.status(201).json(statusUpdatedUser)
+
+    } catch (err) {
+        console.error(err)
+    }
+
+
 
 }

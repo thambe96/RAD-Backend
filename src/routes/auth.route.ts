@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { register, login, getUserDetails, updateApprovalStatus, handleRefreshToken, updateDetaulStatus, getPendingStatusProfiles } from "../controllers/auth.controller"
+import { register, login, getUserDetails, updateApprovalStatus, handleRefreshToken, updateDetaulStatus, getPendingStatusProfiles, approveContributorRequest } from "../controllers/auth.controller"
 import { upload } from "../middleware/upload"
 import { authenticate } from "../middleware/auth"
 import { checkRole } from "../middleware/inspect"
@@ -15,5 +15,6 @@ authRoter.post("/updateApproval", authenticate, checkRole(Role.ADMIN), updateApp
 authRoter.post("/refrsh", handleRefreshToken)
 authRoter.patch("/updateDefaultStatus/:id", updateDetaulStatus)
 authRoter.get('/getPendigStatusProfs', getPendingStatusProfiles)
+authRoter.patch('/approvRequest', approveContributorRequest)
 
 export default authRoter
