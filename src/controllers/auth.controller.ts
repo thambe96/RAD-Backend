@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 import { type } from "os"
 import { AuthRequest } from "../middleware/auth"
+import { error } from "console"
 
 dotenv.config()
 
@@ -201,3 +202,27 @@ export const getUserDetails = async (req: AuthRequest, res: Response) => {
         data: user
     })
 }
+
+export const updateDetaulStatus = async (req: AuthRequest, res: Response) => {
+    const id = req.params.id
+    console.log(id)
+
+    try {   
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            {status: 'PENDING'},
+            {new: true}
+        )
+        if (!updatedUser) {
+            return res.status(404).json({message: 'User not found'})
+        }
+        res.status(201).json(updatedUser)
+
+    } catch (err) {
+        res.status(501).json({message: 'sever error'})
+    }
+
+
+    
+}
+
