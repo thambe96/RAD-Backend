@@ -226,3 +226,15 @@ export const updateDetaulStatus = async (req: AuthRequest, res: Response) => {
     
 }
 
+
+
+export const getPendingStatusProfiles = async (req: AuthRequest, res: Response) => {
+
+    try {
+        const pendingStatusUsers = await User.find({status: 'PENDING'})
+        res.json(pendingStatusUsers)
+    } catch (err) {
+        res.status(501).json({message: "server error"})
+    }
+
+}
