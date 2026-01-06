@@ -1,6 +1,19 @@
 import { Request, Response } from "express"
 
 export const createMovieReviewPost = (req: Request, res: Response) => {
+
+    // title: string,
+    // content: string,
+    // categories: Ctegory[],
+    // movieImageURL: string,
+
+
+
+    const {title, content, categories} = req.body
+
+
+
+
     console.log('Hi this is createMovieReviewPost endpoint')
     return res.status(201).json({message: "createMovieReviewPost endpoint!!"})
 }
