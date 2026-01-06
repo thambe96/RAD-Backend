@@ -56,3 +56,17 @@ export const updateaMovieReviewPost = (req: Request, res: Response) => {
 export const getClieckedPost = (req: Request, res: Response) => {
     return res.status(201).json({message: "Mov post retrieved successfully!"})
 }
+
+export const getAllMovieReviews = async (req: Request, res: Response) => {
+
+    try {
+
+        const movieReviewList = await MovieReview.find()
+        res.status(200).json(movieReviewList)
+
+    } catch (error) {
+        console.error(error)
+        res.status(501).json({message: 'Faild to fetch reviews'})
+    }
+    
+}
