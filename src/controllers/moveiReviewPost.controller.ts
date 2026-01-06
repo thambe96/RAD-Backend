@@ -1,6 +1,8 @@
 import { Request, Response } from "express"
+import { imageUploader } from "../utils/upload.image"
+import { MovieReview } from "../models/MovieReview"
 
-export const createMovieReviewPost = (req: Request, res: Response) => {
+export const createMovieReviewPost = async (req: Request, res: Response) => {
 
     // title: string,
     // content: string,
@@ -8,14 +10,38 @@ export const createMovieReviewPost = (req: Request, res: Response) => {
     // movieImageURL: string,
 
 
+    try {
+        const {title, content, categories, contributor} = req.body
+        const movieImageURL = await imageUploader(req.file?.buffer)
+        console.log(title)
+        console.log(content)
+        console.log(categories)
+        console.log(movieImageURL)
 
-    const {title, content, categories} = req.body
+        // create the MovieReview Object model and save it
+
+        const newMovieReview = new MovieReview({
+            title,
+            content,
+            categories,
+            movieImageURL,
+            contributor
+
+        })  
+
+        const savedMoviwReview = await newMovieReview.save()
+
+        res.status(201).json(savedMoviwReview)
 
 
-
+    } catch (error) {
+        console.error(error)
+        res.status(501).json({ error: "Faild to save review" })
+    }
+    
 
     console.log('Hi this is createMovieReviewPost endpoint')
-    return res.status(201).json({message: "createMovieReviewPost endpoint!!"})
+    
 }
 
 export const deleteMovieReviewPost = (req: Request, res: Response) => {

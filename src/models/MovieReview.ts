@@ -7,7 +7,9 @@ export enum Ctegory {
     ACTION = "ACTION",
     THRILLER = "THRILLER",
     ROMANCE = "TOMANCE",
-    DETECTIVE = "DETECTIVE"
+    DETECTIVE = "DETECTIVE",
+    WAR = "WAR",
+    DRAMA = "DRAMA"
 
 }
 
