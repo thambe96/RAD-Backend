@@ -252,7 +252,11 @@ export const approveContributorRequest = async (req: AuthRequest, res: Response)
     try {
         const statusUpdatedUser = await User.findByIdAndUpdate(
             id,
-            {status: status},
+            {
+                $set: { status: ApprovalStatus.APPROVED},
+                $addToSet: { roles: Role.CONTRIBUTOR}
+            
+            },
             {new: true}
         )
  
@@ -267,4 +271,20 @@ export const approveContributorRequest = async (req: AuthRequest, res: Response)
 
 
 
+}
+
+
+export const getContributors = async (req: AuthRequest, res: Response) => {
+    try {
+        const contributors = await User.find({roles: Role.CONTRIBUTOR})
+        if (!contributors || contributors.length === 0){
+            return res.json([])
+        }
+
+        res.status(200).json(contributors)
+
+    } catch (error) {
+        console.error(error)
+        res.status(501).json({message: 'server errror!'})
+    }
 }

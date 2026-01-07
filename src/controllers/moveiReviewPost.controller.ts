@@ -70,3 +70,24 @@ export const getAllMovieReviews = async (req: Request, res: Response) => {
     }
     
 }
+
+
+export const getMyReviews = async (req: Request, res: Response) => {
+
+    // userId in the path variable
+
+    try {
+        const contributorId = req.params.contributorId
+        const movieReviewList = await MovieReview.find({contributor: contributorId})
+        console.log('Movie Review List: ', movieReviewList)
+        if (!movieReviewList || movieReviewList.length == 0) {
+            return res.status(404).json([])
+        }
+        res.json(movieReviewList)
+    } catch (error) {
+        console.error(error)
+        res.status(501).json({message: 'Server Error'})
+    }
+}
+
+
