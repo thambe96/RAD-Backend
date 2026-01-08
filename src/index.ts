@@ -7,6 +7,8 @@ import mongoose from "mongoose"
 import { error } from "console"
 import authRoter from "./routes/auth.route"
 import movieReviewPostRouter from "./routes/movieReviewPost.route"
+import wishListRouter from "./routes/wishlist.route"
+import commentRouer from "./routes/comment.route"
 
 
 
@@ -40,10 +42,8 @@ app.use("/api/v1/auth", authRoter)
 
 app.use("/api/v1/movieReviewPost", movieReviewPostRouter)
 
-
-
-
-
+app.use("/api/v1/wishLIst", wishListRouter)
+app.use("/api/v1/comments", commentRouer)
 
 
 
