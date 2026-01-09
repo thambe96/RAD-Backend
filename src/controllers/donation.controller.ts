@@ -25,3 +25,8 @@ export const donationHandler = async (req: Request, res: Response) => {
     }
     
 }
+
+
+export const getPublishableKey = (req: Request, res: Response) => {
+    res.json({publishableKey: `${PUBLISHABLE_KEY}`})
+}
