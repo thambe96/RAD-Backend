@@ -30,4 +30,4 @@ const commentSchema = new Schema<IComment>({
 })
 
 
-export const Comemnt = mongoose.model<IComment>("Comment", commentSchema)
+export const Commemnt = mongoose.model<IComment>("Comment", commentSchema)

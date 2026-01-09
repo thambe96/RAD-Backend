@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { addComment, fetchAllComments } from "../controllers/comment.controller";
+import { addComment, fetchAllCommentsByMovie } from "../controllers/comment.controller";
 
 
 const commentRouer = Router()
 
 commentRouer.post('/addComment', addComment)
-commentRouer.get('/fetchAllComments/:userId', fetchAllComments)
+commentRouer.get('/fetchAllCommentsbyId/:movieId', fetchAllCommentsByMovie)
 
 
 export default commentRouer
