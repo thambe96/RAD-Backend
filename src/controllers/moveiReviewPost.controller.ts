@@ -91,3 +91,20 @@ export const getMyReviews = async (req: Request, res: Response) => {
 }
 
 
+export const getMovieReviewById = async (req: Request, res: Response) => {
+    try {
+        const {movieId} = req.params
+        if (!movieId) {
+            return res.json({message: 'server error'})
+        }
+
+        const movieDetials = await MovieReview.findById(movieId)
+        res.status(200).json(movieDetials)
+
+
+    } catch (error) {
+        console.error(error)
+        res.json({message: 'server error'})
+    }
+}
+

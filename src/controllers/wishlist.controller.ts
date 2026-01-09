@@ -7,11 +7,13 @@ import { MovieReview } from "../models/MovieReview"
 
 export const addToWishList = async (req: Request, res: Response) => {
 
-    const userId = req.params
+    const {userId} = req.params
     const { movieReviewId } = req.query
 
     console.log(userId)
     console.log(movieReviewId)
+
+    console.log('in add to wish list endpoint!')
 
     try {
 
@@ -38,7 +40,7 @@ export const addToWishList = async (req: Request, res: Response) => {
 } 
 
 export const removeFromWishist = async (req: Request, res: Response) => {
-    const userId = req.params
+    const { userId } = req.params
     const { movieReviewId } = req.query
 
     if (!userId || !movieReviewId) {
@@ -48,7 +50,7 @@ export const removeFromWishist = async (req: Request, res: Response) => {
 
     try {
 
-        const result = MovieReview.findOneAndDelete({
+        const result = await WishList.findOneAndDelete({
             user: userId,
             favouriteMovieReviews: movieReviewId
         })
@@ -69,6 +71,9 @@ export const removeFromWishist = async (req: Request, res: Response) => {
 export const fetchWishList = async (req: Request, res: Response) => {
 
     try {
+
+        console.log('in fetch wishlist endpoint!!')
+
         const { userId } = req.params
         console.log(userId)
 
@@ -77,7 +82,7 @@ export const fetchWishList = async (req: Request, res: Response) => {
         .populate("favouriteMovieReviews")
 
         if (!wishList || wishList.length === 0) {
-            res.status(404).json([])
+            return res.status(404).json([])
         }
 
         res.status(200).json(wishList)
