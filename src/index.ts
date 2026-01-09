@@ -9,6 +9,7 @@ import authRoter from "./routes/auth.route"
 import movieReviewPostRouter from "./routes/movieReviewPost.route"
 import wishListRouter from "./routes/wishlist.route"
 import commentRouer from "./routes/comment.route"
+import { donationRouter } from "./routes/donation.route"
 
 
 
@@ -44,6 +45,7 @@ app.use("/api/v1/movieReviewPost", movieReviewPostRouter)
 
 app.use("/api/v1/wishLIst", wishListRouter)
 app.use("/api/v1/comments", commentRouer)
+app.use("/api/v1/donation", donationRouter)
 
 
 
